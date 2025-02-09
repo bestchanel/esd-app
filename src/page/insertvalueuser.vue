@@ -576,8 +576,8 @@ const showformprint = ref(false);
 const filteredData = ref([]); // ข้อมูลหลังกรอง
 
 const today = new Date();
-const isMonday = today.getDay() === 4;
-const isFirstDayOfMonth = today.getDate() === 6;
+const isMonday = today.getDay() === 1;
+const isFirstDayOfMonth = today.getDate() === 1;
 const perpage = ref(5); // จำนวนรายการต่อหน้า
 const currentWristStrapPage = ref(1); // หน้าปัจจุบัน
 const currentTableMatPage = ref(1); // หน้าปัจจุบัน
@@ -593,7 +593,7 @@ const paginatedData = computed(() => {
 
   // ตรวจสอบว่าวันนี้เป็นวันจันทร์หรือไม่
   const today = new Date();
-  const isMonday = today.getDay() === 4; // 1 คือวันจันทร์
+  const isMonday = today.getDay() === 1; // 1 คือวันจันทร์
 
   // ถ้าเป็นวันจันทร์ → แค่ซ่อนปุ่ม (showModal.value = true) เมื่อมีข้อมูล
   if (isMonday) {
@@ -611,7 +611,7 @@ const paginatedDataTableMat = computed(() => {
   
   // ตรวจสอบว่าวันนี้เป็นวันจันทร์หรือไม่
   const today = new Date();
-  const isFirstDayOfMonth = today.getDate() === 6; // วันที่ 1 ของเดือน
+  const isFirstDayOfMonth = today.getDate() === 1; // วันที่ 1 ของเดือน
 
   // ถ้าเป็นวันที่ 1 ของเดือน → แค่ซ่อนปุ่ม (showModal.value = true) เมื่อมีข้อมูล
   if (isFirstDayOfMonth) {
