@@ -1523,7 +1523,7 @@ watch(savedSignatureTableMat, (newVal) => {
 /////////////////////////
 
 
-const pdfUrl = "/HP-06-Wrist-Strap-Weekly-Self-Check-v.02.pdf";
+const pdfUrl = "public/HP-06-Wrist-Strap-Weekly-Self-Check-v.02.pdf";
 
 const printWristStrap = async () => {
   try {
@@ -1717,7 +1717,7 @@ const printWristStrap = async () => {
 
 
 
-const pdfUrlTableMat = "/HP-07-Table-Mat-Checklist-v.02.pdf";
+const pdfUrlTableMat = "public/HP-07-Table-Mat-Checklist-v.02.pdf";
 
 const printTableMat = async () => {
   try {
