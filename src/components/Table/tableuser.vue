@@ -228,7 +228,7 @@ const validateUserForm = async () => {
 
   try {
     await axios.put(
-      `http://localhost:1337/api/users/${dataupdateusermodal.value.id}`,
+      `https://esd-app-strapi-dq8t.onrender.com/api/users/${dataupdateusermodal.value.id}`,
       dataupdateusermodal.value,
       {
         headers: {
@@ -278,7 +278,7 @@ const DeleteUser = async (id) => {
 
   if (confirmDelete.isConfirmed) {
     try {
-      await axios.delete(`http://localhost:1337/api/users/${id}`, {
+      await axios.delete(`https://esd-app-strapi-dq8t.onrender.com/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },

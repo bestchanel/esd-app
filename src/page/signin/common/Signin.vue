@@ -96,7 +96,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://localhost:1337/api/auth/local",
+          "https://esd-app-strapi-dq8t.onrender.com/api/auth/local",
           payload,
           {
             headers: {
