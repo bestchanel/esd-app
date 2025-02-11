@@ -825,7 +825,7 @@ const SaveData = async () => {
 
     try {
       const response = await axios.post(
-        "https://esd-app-strapi-dq8t.onrender.com/api/wrist-straps",
+        "https://esd-app-strapi-test.onrender.com/api/wrist-straps",
         payload,
         {
           headers: {
@@ -873,7 +873,7 @@ const SaveData = async () => {
 
     try {
       const response = await axios.post(
-        "https://esd-app-strapi-dq8t.onrender.com/api/table-mats",
+        "https://esd-app-strapi-test.onrender.com/api/table-mats",
         payload,
         {
           headers: {
@@ -922,7 +922,7 @@ const get_data = () => {
   if (selectedTable.value == "TABLE MAT") {
     axios
       .get(
-        "https://esd-app-strapi-dq8t.onrender.com/api/table-mats?populate[users_permissions_user][populate]=branches"
+        "https://esd-app-strapi-test.onrender.com/api/table-mats?populate[users_permissions_user][populate]=branches"
       )
       .then((table_matsresponse) => {
         data_table_mats.value = table_matsresponse.data.data;
@@ -935,7 +935,7 @@ const get_data = () => {
   } else if (selectedTable.value == "WRIST STRAP") {
     axios
       .get(
-        "https://esd-app-strapi-dq8t.onrender.com/api/wrist-straps?populate[users_permissions_user][populate]=branches"
+        "https://esd-app-strapi-test.onrender.com/api/wrist-straps?populate[users_permissions_user][populate]=branches"
       )
       .then((wrist_strapsresponse) => {
         // wrist_straps.value = wrist_strapsresponse.data.data.map(item => item.attributes.Resistance.);
@@ -994,7 +994,7 @@ const UpdateItemWristStrap = async () => {
 
   try {
     await axios.put(
-      `https://esd-app-strapi-dq8t.onrender.com/api/wrist-straps/${dataupdatemodal.value.id}`,
+      `https://esd-app-strapi-test.onrender.com/api/wrist-straps/${dataupdatemodal.value.id}`,
       data_update,
       {
         headers: {
@@ -1039,7 +1039,7 @@ const UpdateItemTableMat = async () => {
 
   try {
     await axios.put(
-      `https://esd-app-strapi-dq8t.onrender.com/api/table-mats/${dataupdatemodal.value.id}`,
+      `https://esd-app-strapi-test.onrender.com/api/table-mats/${dataupdatemodal.value.id}`,
       data_update,
       {
         headers: {
@@ -1088,7 +1088,7 @@ const deleteItemWristStrap = async (id) => {
 
   if (confirmDelete.isConfirmed) {
     try {
-      await axios.delete(`https://esd-app-strapi-dq8t.onrender.com/api/wrist-straps/${id}`, {
+      await axios.delete(`https://esd-app-strapi-test.onrender.com/api/wrist-straps/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
@@ -1131,7 +1131,7 @@ const deleteItemTableMat = async (id) => {
 
   if (confirmDelete.isConfirmed) {
     try {
-      await axios.delete(`https://esd-app-strapi-dq8t.onrender.com/api/table-mats/${id}`, {
+      await axios.delete(`https://esd-app-strapi-test.onrender.com/api/table-mats/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
