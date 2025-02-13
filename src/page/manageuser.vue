@@ -101,7 +101,7 @@ const filterStatus = ref('');
 
 const fetchBranches = async () => {
   try {
-    const response = await axios.get('https://esd-app-strapi-test.onrender.com/api/branches');
+    const response = await axios.get('https://esd-app-strapi.up.railway.app/api/branches');
     branches.value = response.data.data;
   } catch (error) {
     console.error('Error fetching branches:', error);
@@ -117,7 +117,7 @@ const fetchBranches = async () => {
 
 const fetchUsers = async () => {
   try {
-    const response = await axios.get('https://esd-app-strapi-test.onrender.com/api/users?populate=branches');
+    const response = await axios.get('https://esd-app-strapi.up.railway.app/api/users?populate=branches');
     userData.value = response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -155,7 +155,7 @@ const saveUserData = async () => {
     User_Type: User_Type.value,  // ส่งค่า User_Type
   };
   try {
-    await axios.post("https://esd-app-strapi-test.onrender.com/api/auth/local/register", payload);
+    await axios.post("https://esd-app-strapi.up.railway.app/api/auth/local/register", payload);
     Swal.fire({
       icon: "success",
       title: "สมัครผู้ใช้งานสำเร็จ!",

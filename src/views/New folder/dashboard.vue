@@ -420,15 +420,15 @@ created() {
       async fetchResistanceData() {
   try {
     // ดึงข้อมูลจาก API
-    const response = await axios.get("https://esd-app-strapi-test.onrender.com/api/wrist-straps?populate=users_permissions_user");
+    const response = await axios.get("https://esd-app-strapi.up.railway.app/api/wrist-straps?populate=users_permissions_user");
     this.resistanceData = response.data.data;
 
-    const tableMatResponse = await axios.get("https://esd-app-strapi-test.onrender.com/api/table-mats?populate[users_permissions_user][populate]=branches");
+    const tableMatResponse = await axios.get("https://esd-app-strapi.up.railway.app/api/table-mats?populate[users_permissions_user][populate]=branches");
     this.tableMatData = tableMatResponse.data.data;
 
 
-    const usersResponse = await axios.get("https://esd-app-strapi-test.onrender.com/api/users");
-    const branchesResponse = await axios.get("https://esd-app-strapi-test.onrender.com/api/branches");
+    const usersResponse = await axios.get("https://esd-app-strapi.up.railway.app/api/users");
+    const branchesResponse = await axios.get("https://esd-app-strapi.up.railway.app/api/branches");
 
     this.statistics[0].count = usersResponse.data.length.toString();
     this.statistics[1].count = branchesResponse.data.data.length.toString();

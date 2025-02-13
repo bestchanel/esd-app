@@ -113,11 +113,26 @@
     placeholder="กรอก Email" 
     label="Email" 
     class="mt-4" />
-  <Textinput 
-    v-model="dataupdateusermodal.branches.Branchname"
-    placeholder="กรอกสาขา" 
-    label="สาขา" 
-    class="mt-4" />
+
+    <div class="mt-4">
+    <label for="Branchname" class="block text-sm font-medium text-gray-700">สาขา</label>
+    <div class="relative">
+      <select 
+        v-model="dataupdateusermodal.branches.Branchname" 
+        id="Branchname" 
+        class="textinput-like-select appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1"
+      >
+        <option value="" disabled selected>เลือกสาขา</option>
+        <option 
+  v-for="branch in branches" 
+  :key="branch.id" 
+  :value="branch.attributes.Branchname"
+>
+  {{ branch.attributes.Branchname }}
+</option>
+      </select>
+    </div>
+  </div>
 
   <!-- User Type Dropdown Styled Like Textinput -->
   <div class="mt-4">
@@ -178,7 +193,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import axios from "axios";
 import Button from "@/components/Button/index.vue";
 import Modal from "@/components/Modal/Modal.vue";
@@ -190,6 +205,7 @@ import Swal from "sweetalert2";
 
 const openEditUserModal = ref(true);
 const dataupdateusermodal = ref("");
+const branches = ref([]);  // ตัวแปรสำหรับเก็บข้อมูลสาขา
 
 const token = ref(localStorage.getItem("token"));
 
@@ -200,6 +216,17 @@ const props = defineProps({
 
 
 const users = ref([]);
+
+// ดึงข้อมูลจาก API เมื่อ component ถูก mount
+onMounted(async () => {
+  try {
+    const response = await axios.get("https://esd-app-strapi.up.railway.app/api/branches");
+    branches.value = response.data.data;
+    console.log(branches.value); // เพิ่มเพื่อเช็คข้อมูล
+  } catch (error) {
+    console.error("Error fetching branches:", error);
+  }
+});
 
 watch(
   () => props.userData, // ดูการเปลี่ยนแปลงข้อมูล
@@ -228,7 +255,7 @@ const validateUserForm = async () => {
 
   try {
     await axios.put(
-      `https://esd-app-strapi-test.onrender.com/api/users/${dataupdateusermodal.value.id}`,
+      `https://esd-app-strapi.up.railway.app/api/users/${dataupdateusermodal.value.id}`,
       dataupdateusermodal.value,
       {
         headers: {
@@ -278,7 +305,7 @@ const DeleteUser = async (id) => {
 
   if (confirmDelete.isConfirmed) {
     try {
-      await axios.delete(`https://esd-app-strapi-test.onrender.com/api/users/${id}`, {
+      await axios.delete(`https://esd-app-strapi.up.railway.app/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
