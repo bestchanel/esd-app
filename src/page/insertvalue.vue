@@ -1112,7 +1112,7 @@ if (selectedOption.value === "WRIST STRAP") {
       }
     );
 
-    message = `✅ *บันทึกข้อมูล WRIST STRAP สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n🏢 *สาขา:* ${wrist_branch.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ *ความต้านทาน:* ${Resitance.value}`;
+    message = `✅ *บันทึกข้อมูล WRIST STRAP สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ *ความต้านทาน:* ${Resitance.value}`;
     sendTelegramMessage(message);
 
     closemodal.value?.closeModal();
@@ -1163,7 +1163,7 @@ if (selectedOption.value === "WRIST STRAP") {
       }
     );
 
-    message = `✅ *บันทึกข้อมูล TABLE MAT สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n🏢 *สาขา:* ${wrist_branch.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ 🌱 *สายดิน:* ${Ground.value ? "✅ มี" : "❌ ไม่มี"}\n🔵 *ความต้านทานแผ่นรองโต๊ะ:* ${ResistanceTableMat.value}`;
+    message = `✅ *บันทึกข้อมูล TABLE MAT สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ 🌱 *สายดิน:* ${Ground.value ? "✅ มี" : "❌ ไม่มี"}\n🔵 *ความต้านทานแผ่นรองโต๊ะ:* ${ResistanceTableMat.value}`;
     sendTelegramMessage(message);
 
     closemodal.value?.closeModal();

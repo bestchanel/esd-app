@@ -577,7 +577,7 @@ const filteredData = ref([]); // ข้อมูลหลังกรอง
 
 const today = new Date();
 const isMonday = today.getDay() === 1;
-const isFirstDayOfMonth = today.getDate() === 1;
+const isFirstDayOfMonth = today.getDate() === 16;
 const perpage = ref(5); // จำนวนรายการต่อหน้า
 const currentWristStrapPage = ref(1); // หน้าปัจจุบัน
 const currentTableMatPage = ref(1); // หน้าปัจจุบัน
@@ -609,12 +609,13 @@ const paginatedDataTableMat = computed(() => {
   const start = (currentTableMatPage.value - 1) * perpage.value;
   const data = filteredData.value.slice(start, start + perpage.value);
   
-  // ตรวจสอบว่าวันนี้เป็นวันจันทร์หรือไม่
+  // ตรวจสอบว่าวันนี้เป็นวันที่ 1 ถึง 10 ของเดือนหรือไม่
   const today = new Date();
-  const isFirstDayOfMonth = today.getDate() === 1; // วันที่ 1 ของเดือน
+  const dayOfMonth = today.getDate();
+  const isFirstTenDays = dayOfMonth >= 1 && dayOfMonth <= 16; // ตรวจสอบวันที่ 1-10
 
-  // ถ้าเป็นวันที่ 1 ของเดือน → แค่ซ่อนปุ่ม (showModal.value = true) เมื่อมีข้อมูล
-  if (isFirstDayOfMonth) {
+  // ถ้าอยู่ในช่วงวันที่ 1-10 → แค่ซ่อนปุ่ม (showModal.value = true) เมื่อมีข้อมูล
+  if (isFirstTenDays) {
     showModal.value = data.length > 0 ? false : true;
   } else {
     showModal.value = false; // วันอื่นซ่อนปุ่มเสมอ
@@ -810,104 +811,137 @@ onMounted(() => {
 
 
 
-const SaveData = async () => {
-  if (selectedOption.value === "WRIST STRAP") {
-    const payload = {
-      data: {
-        users_permissions_user: users.value,
-        name: wrist_name.value,
-        branch: wrist_branch.value,
-        week: week.value,
-        recordDate: recordDate.value,
-        Resistance: Resitance.value,
-      },
-    };
+const sendTelegramMessage = async (message) => {
+const telegramToken = "8057011868:AAHEv_oYaYWbYf3sqKcZFyjB9bmxi8zWK2g"; // ใส่ Token ของบอท
+const chatId = "7315907432"; // ตรวจสอบ Chat ID ให้ถูกต้อง
+const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
 
-    try {
-      const response = await axios.post(
-        "https://esd-app-strapi.up.railway.app/api/wrist-straps",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token.value}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      closemodal.value?.closeModal();
-      resetform();
-      selecttablenow();
-      get_data();
-
-      // แสดง SweetAlert หลังจากบันทึกข้อมูลสำเร็จ
-      Swal.fire({
-        icon: "success",
-        title: "บันทึกสำเร็จ!",
-        text: "ข้อมูลได้ถูกบันทึกเรียบร้อยแล้ว",
-        showConfirmButton: false,
-        timer: 1000, // แสดงข้อความ 2 วินาที แล้วหายไปเอง
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถบันทึกข้อมูลได้",
-        showConfirmButton: false,
-        timer: 1000, // แสดงข้อความ 2 วินาที แล้วหายไปเอง
-      });
-      closemodal.value?.closeModal();
-      console.error("Error saving WRIST STRAP data:", error);
-    }
-  } else if (selectedOption.value === "TABLE MAT") {
-    const payload = {
-      data: {
-        users_permissions_user: users.value,
-        name: wrist_name.value,
-        branch: wrist_branch.value,
-        recordDate: recordDate.value,
-        Resistance: Resitance.value,
-        Ground: Ground.value, // ค่านี้ต้องเป็น boolean
-        ResistanceTableMat: ResistanceTableMat.value,
-      },
-    };
-
-    try {
-      const response = await axios.post(
-        "https://esd-app-strapi.up.railway.app/api/table-mats",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token.value}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      closemodal.value?.closeModal();
-      resetform();
-      selecttablenow();
-      get_data();
-
-      // แสดง SweetAlert หลังจากบันทึกข้อมูลสำเร็จ
-      Swal.fire({
-        icon: "success",
-        title: "บันทึกสำเร็จ!",
-        text: "ข้อมูลได้ถูกบันทึกเรียบร้อยแล้ว",
-        showConfirmButton: false,
-        timer: 1000, // แสดงข้อความ 2 วินาที แล้วหายไปเอง
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถบันทึกข้อมูลได้",
-        showConfirmButton: false,
-        timer: 1000, // แสดงข้อความ 2 วินาที แล้วหายไปเอง
-      });
-      closemodal.value?.closeModal();
-      console.error("Error saving TABLE MAT data:", error);
-    }
-  }
+const data = {
+  chat_id: chatId,
+  text: message,
+  parse_mode: "Markdown",
 };
+
+console.log("📤 ส่งข้อความไปยัง Telegram:", data);
+
+try {
+  const response = await axios.post(url, data);
+  console.log("✅ ส่งสำเร็จ:", response.data);
+} catch (error) {
+  console.error("❌ ส่งไม่สำเร็จ:", error.response?.data || error.message);
+  if (error.response) {
+    console.error("📌 รายละเอียด:", error.response.data);
+  }
+}
+};
+
+const SaveData = async () => {
+let message = "";
+
+if (selectedOption.value === "WRIST STRAP") {
+  const payload = {
+    data: {
+      users_permissions_user: users.value,
+      name: wrist_name.value,
+      fullname: fullname.value,
+      branch: wrist_branch.value,
+      week: week.value,
+      recordDate: recordDate.value,
+      Resistance: Resitance.value,
+    },
+  };
+
+  try {
+    await axios.post(
+      "https://esd-app-strapi.up.railway.app/api/wrist-straps",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    message = `✅ *บันทึกข้อมูล WRIST STRAP สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ *ความต้านทาน:* ${Resitance.value}`;
+    sendTelegramMessage(message);
+
+    closemodal.value?.closeModal();
+    resetform();
+    selecttablenow();
+    get_data();
+
+    Swal.fire({
+      icon: "success",
+      title: "บันทึกสำเร็จ!",
+      text: "ข้อมูลได้ถูกบันทึกเรียบร้อยแล้ว",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด",
+      text: "ไม่สามารถบันทึกข้อมูลได้",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    console.error("Error saving WRIST STRAP data:", error);
+  }
+} else if (selectedOption.value === "TABLE MAT") {
+  const payload = {
+    data: {
+      users_permissions_user: users.value,
+      name: wrist_name.value,
+      fullname: fullname.value,
+      branch: wrist_branch.value,
+      recordDate: recordDate.value,
+      Resistance: Resitance.value,
+      Ground: Ground.value,
+      ResistanceTableMat: ResistanceTableMat.value,
+    },
+  };
+
+  try {
+    await axios.post(
+      "https://esd-app-strapi.up.railway.app/api/table-mats",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    message = `✅ *บันทึกข้อมูล TABLE MAT สำเร็จ!*\n📌 *ชื่อ:* ${fullname.value}\n📆 *วันที่:* ${recordDate.value}\n⚡ 🌱 *สายดิน:* ${Ground.value ? "✅ มี" : "❌ ไม่มี"}\n🔵 *ความต้านทานแผ่นรองโต๊ะ:* ${ResistanceTableMat.value}`;
+    sendTelegramMessage(message);
+
+    closemodal.value?.closeModal();
+    resetform();
+    selecttablenow();
+    get_data();
+
+    Swal.fire({
+      icon: "success",
+      title: "บันทึกสำเร็จ!",
+      text: "ข้อมูลได้ถูกบันทึกเรียบร้อยแล้ว",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด",
+      text: "ไม่สามารถบันทึกข้อมูลได้",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    console.error("Error saving TABLE MAT data:", error);
+  }
+}
+};
+
 
 const resetform = () => {
   Resitance.value = "";
