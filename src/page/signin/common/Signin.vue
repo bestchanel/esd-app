@@ -43,13 +43,13 @@
           />
         </span>
         <span class="text-slate-500 dark:text-slate-400 text-sm leading-6"
-          >Keep me signed in</span
+          >จดจำการเข้าสู่ระบบ</span
         >
       </label>
       <router-link
         to="/forgot-password"
         class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
-        >Forgot Password?</router-link
+        >ลืมรหัสผ่าน?</router-link
       >
     </div>
 

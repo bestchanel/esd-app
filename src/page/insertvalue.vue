@@ -152,13 +152,85 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 
         <!-- ปุ่มและ Modal สำหรับ WRIST STRAP -->
 
+<Button 
+v-if="selectedTable === 'WRIST STRAP'"
+@click="openWristStrapModal"
+btnClass="btn-success"
+:text="savedSignatureWristStrap ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
+icon="ph:signature"
+class="mr-4" 
+/>
+
+<!-- Modal สำหรับลายเซ็น -->
+<!-- Modal สำหรับลายเซ็น Wrist Strap -->
+<Transition>
+<div v-if="state.showSignatureWristStrap" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Wrist Strap</h2>
+    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
+    <div class="flex justify-center">
+      <Vue3Signature ref="signatureWristStrap" :sigOption="state.option" :w="'300px'" :h="'300px'" 
+             :disabled="state.disabled" class="example"/>
+    </div>
+    <div class="flex gap-3 r mt-4">
+      <button @click="saveSignatureWristStrap" 
+              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
+      <button @click="clearSignatureWristStrap" 
+              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
+      <button @click="undoWristStrap" 
+              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
+      <button @click="state.showSignatureWristStrap = false" 
+              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
+    </div>
+    <p v-if="savedSignatureWristStrap" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
+  </div>
+</div>
+</Transition>
+
+
+<!-- ปุ่มและ Modal สำหรับ TABLE MAT -->
+<Button 
+v-if="selectedTable === 'TABLE MAT'"
+ @click="openTableMatModal"
+btnClass="btn-success"
+:text="savedSignatureTableMat ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
+icon="ph:signature"
+class="mr-4" 
+/>
+
+<!-- Modal สำหรับลายเซ็น -->
+<Transition>
+<div v-if="state.showSignatureTableMat" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Table Mat</h2>
+    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
+    <div class="flex justify-center">
+      <Vue3Signature ref="signatureTableMat" :sigOption="state.option" :w="'300px'" :h="'300px'" 
+             :disabled="state.disabled" class="example"/>
+    </div>
+    <div class="flex gap-3 r mt-4">
+      <button @click="saveSignatureTableMat" 
+              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
+      <button @click="clearSignatureTableMat" 
+              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
+      <button @click="undoTableMat" 
+              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
+      <button @click="state.showSignatureTableMat = false" 
+              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
+    </div>
+    <p v-if="savedSignatureTableMat" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
+  </div>
+</div>
+</Transition>
+
+
       <!-- Modal Section -->
       <Modal 
         v-if="showModal"
         ref="closemodal"
         title="บันทึกค่าความต้านทาน"
         label="บันทึกค่าความต้านทาน"
-        labelClass="btn-success mr-4"
+        labelClass="btn-success"
         class="ml-auto"
       >
         <label
@@ -182,7 +254,6 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
           class="text-base text-slate-600 dark:text-slate-300"
         >
           <Textinput
-            id="fullname"
             v-model="fullname"
             placeholder="กรอกชื่อ-นามสกุล"
             label="ชื่อ-นามสกุล"
@@ -222,7 +293,6 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
           class="text-base text-slate-600 dark:text-slate-300"
         >
           <Textinput
-            id="fullname"
             v-model="fullname"
             placeholder="กรอกชื่อ-นามสกุล"
             label="ชื่อ-นามสกุล"
@@ -281,76 +351,6 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
           @click="SaveData"
         />
       </Modal>
-
-
-      <Button 
-v-if="selectedTable === 'WRIST STRAP'"
-@click="state.showSignatureWristStrap = true"
-btnClass="btn-success"
-:text="savedSignatureWristStrap ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
-icon="ph:signature"
-/>
-
-<!-- Modal สำหรับลายเซ็น Wrist Strap -->
-<Transition>
-<div v-if="state.showSignatureWristStrap" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Wrist Strap</h2>
-    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
-    <div class="flex justify-center">
-      <Vue3Signature ref="signatureWristStrap" :sigOption="state.option" :w="'300px'" :h="'300px'" 
-             :disabled="state.disabled" class="example"/>
-    </div>
-    <div class="flex gap-3 r mt-4">
-      <button @click="saveSignatureWristStrap" 
-              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
-      <button @click="clearSignatureWristStrap" 
-              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
-      <button @click="undoWristStrap" 
-              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
-      <button @click="state.showSignatureWristStrap = false" 
-              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
-    </div>
-    <p v-if="savedSignatureWristStrap" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
-  </div>
-</div>
-</Transition>
-
-<!-- ปุ่มและ Modal สำหรับ TABLE MAT -->
-<Button 
-v-if="selectedTable === 'TABLE MAT'"
-@click="state.showSignatureTableMat = true"
-btnClass="btn-success"
-:text="savedSignatureTableMat ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
-icon="ph:signature"
-/>
-
-<!-- Modal สำหรับลายเซ็น -->
-<Transition>
-<div v-if="state.showSignatureTableMat" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Table Mat</h2>
-    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
-    <div class="flex justify-center">
-      <Vue3Signature ref="signatureTableMat" :sigOption="state.option" :w="'300px'" :h="'300px'" 
-             :disabled="state.disabled" class="example"/>
-    </div>
-    <div class="flex gap-3 r mt-4">
-      <button @click="saveSignatureTableMat" 
-              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
-      <button @click="clearSignatureTableMat" 
-              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
-      <button @click="undoTableMat" 
-              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
-      <button @click="state.showSignatureTableMat = false" 
-              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
-    </div>
-    <p v-if="savedSignatureTableMat" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
-  </div>
-</div>
-</Transition>
-
-
 <!-- ปุ่ม ออกรายงาน PDF -->
 <Button
 v-if="selectedTable === 'WRIST STRAP'"
@@ -547,39 +547,35 @@ class="ml-4"
 </div>
 
 
-<Modal
+
+    <Modal
       ref="openEditmodal"
       title="แก้ไขค่าความต้านทาน"
       label=""
       labelClass="btn-ghost"
       class="ml-auto"
     >
-    <Textinput
-            v-model="dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Name"
-            placeholder="กรอกชื่อ-นามสกุล"
-            label="ชื่อ-นามสกุล"
-            :disabled="isDisabled"
-            class="mt-4"
-          />
-        <Textinput
-    type="text"
-    id="week"
-    v-model="week"
-    placeholder="กรอกสัปดาห์ที่"
-    label="สัปดาห์ที่"
-    :disabled="isDisabled"
-    class="mt-4"
-  />
-  <Textinput
-    type="text"
-    id="recordDate"
-    v-model="recordDate"
-    placeholder="กรอกวันที่บันทึก"
-    label="วันที่บันทึก"
-    :disabled="isDisabled"
-    class="mt-4"
-  />
+      <p>
+        ชื่อ-นามสกุล :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .Name
+        }}
+      </p>
+      <p>
+        Email :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .email
+        }}
+      </p>
+      <p>
+        ตำแหน่ง :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .Position
+        }}
+      </p>
 
       <div class="text-base text-slate-600 dark:text-slate-300">
         <Textinput
@@ -605,24 +601,27 @@ class="ml-4"
       labelClass="btn-ghost"
       class="ml-auto"
     >
-    <Textinput
-            v-model="dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Name"
-            placeholder="กรอกชื่อ-นามสกุล"
-            label="ชื่อ-นามสกุล"
-            :disabled="isDisabled"
-            class="mt-4"
-          />
-
-  <Textinput
-    type="text"
-    id="recordDate"
-    v-model="recordDate"
-    placeholder="กรอกวันที่บันทึก"
-    label="วันที่บันทึก"
-    :disabled="isDisabled"
-    class="mt-4"
-  />
+      <p>
+        ชื่อ-นามสกุล :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .Name
+        }}
+      </p>
+      <p>
+        Email :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .email
+        }}
+      </p>
+      <p>
+        ตำแหน่ง :
+        {{
+          dataupdatemodal.attributes.users_permissions_user.data.attributes
+            .Position
+        }}
+      </p>
       <div class="mt-4">
             <label
               class="block font-medium text-base text-slate-600 dark:text-slate-300"
@@ -1060,6 +1059,7 @@ selectedYear.value = today.getFullYear() + 543; // ปีไทย
 filterByMonthAndWeek();
 });
 
+
 const sendTelegramMessage = async (message) => {
 const telegramToken = "8057011868:AAHEv_oYaYWbYf3sqKcZFyjB9bmxi8zWK2g"; // ใส่ Token ของบอท
 const chatId = "7315907432"; // ตรวจสอบ Chat ID ให้ถูกต้อง
@@ -1083,8 +1083,6 @@ try {
   }
 }
 };
-
-
 
 const SaveData = async () => {
 let message = "";
@@ -1192,7 +1190,6 @@ if (selectedOption.value === "WRIST STRAP") {
   }
 }
 };
-
 
 const resetform = () => {
 Resitance.value = "";
@@ -1479,7 +1476,15 @@ const savedSignatureTableMat = ref(localStorage.getItem('savedSignatureTableMat'
 const signatureWristStrap = ref(null);
 const signatureTableMat = ref(null);
 
+const openWristStrapModal = () => {
+state.showSignatureWristStrap = true;
+setTimeout(() => loadSavedSignatureWristStrap(), 100); // โหลดลายเซ็นเมื่อเปิด Modal
+};
 
+const openTableMatModal = () => {
+state.showSignatureTableMat = true;
+setTimeout(() => loadSavedSignatureTableMat(), 100); // โหลดลายเซ็นเมื่อเปิด Modal
+};
 
 const saveSignatureWristStrap = () => {
 if (signatureWristStrap.value) {
@@ -1496,6 +1501,22 @@ if (signatureTableMat.value) {
   const date = new Date().toLocaleDateString('th-TH');
   savedSignatureTableMat.value = { signature: signatureData, date: date };
   localStorage.setItem('savedSignatureTableMat', JSON.stringify(savedSignatureTableMat.value));
+}
+};
+
+const loadSavedSignatureWristStrap = () => {
+const savedWristStrapData = JSON.parse(localStorage.getItem('savedSignatureWristStrap'));
+if (savedWristStrapData && savedWristStrapData.signature && signatureWristStrap.value) {
+  signatureWristStrap.value.clear(); // ล้างก่อนโหลด
+  signatureWristStrap.value.fromDataURL(savedWristStrapData.signature);
+}
+};
+
+const loadSavedSignatureTableMat = () => {
+const savedTableMatData = JSON.parse(localStorage.getItem('savedSignatureTableMat'));
+if (savedTableMatData && savedTableMatData.signature && signatureTableMat.value) {
+  signatureTableMat.value.clear(); // ล้างก่อนโหลด
+  signatureTableMat.value.fromDataURL(savedTableMatData.signature);
 }
 };
 
@@ -1694,7 +1715,7 @@ const thaiMonths = [
 const thaiMonth = thaiMonths[parseInt(month) - 1];
     
      pdfDoc.getPages().forEach((p) => {
-
+       // วันที่ชุดแรก
       p.drawText(`/ `, {
         x: 715,
         y: height - 415, // ตำแหน่งแนวตั้ง
@@ -1722,9 +1743,37 @@ const thaiMonth = thaiMonths[parseInt(month) - 1];
     size: 12,
     font,
     color: rgb(0, 0, 0),
+  }); // วันที่ชุดที่สอง (สำเนา)
+  p.drawText(`/ `, {
+    x: 715,
+    y: height - 448, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
   });
-    });
-  }
+  p.drawText(`${day}`, {
+    x: 730,
+    y: height - 448, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  p.drawText(`${thaiMonth}`, {
+    x: 740,
+    y: height - 448, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  p.drawText(`${year}`, {
+    x: 780,
+    y: height - 448, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
+});
+}
 
   // เพิ่มลายเซ็นใน PDF
   if (savedSignatureWristStrapData && savedSignatureWristStrapData.signature) {
@@ -1732,13 +1781,21 @@ const thaiMonth = thaiMonths[parseInt(month) - 1];
     const signatureDims = signatureImage.scale(0.2);
 
     pdfDoc.getPages().forEach((p) => {
+       // ลายเซ็นชุดแรก
       p.drawImage(signatureImage, {
         x: 640,
         y: 150,
         width: signatureDims.width,
         height: signatureDims.height,
       });
-    });
+       // ลายเซ็นชุดที่สอง (สำเนา)
+  p.drawImage(signatureImage, {
+    x: 640,
+    y: 120, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    width: signatureDims.width,
+    height: signatureDims.height,
+  });
+});
   }
 
   const pdfBytes = await pdfDoc.save();
@@ -1911,6 +1968,15 @@ try {
       color: rgb(0, 0, 0),
     });
 
+    
+    page.drawText(` ${resistanceLabel}`, {
+      x: 670,
+      y: startY,
+      size: 12,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
     startY -= lineHeight; // ลดตำแหน่ง Y ลงในแต่ละแถว
     rowCount++;
   });
@@ -1928,7 +1994,7 @@ try {
 
     // แปลงเดือนจากตัวเลขเป็นชื่อเดือนภาษาไทย
     const thaiMonth = thaiMonths[parseInt(month) - 1];
-
+    // วันที่ชุดแรก
     pdfDoc.getPages().forEach((p) => {
       p.drawText(`${day}`, {
         x: 340,
@@ -1953,23 +2019,54 @@ try {
         font,
         color: rgb(0, 0, 0),
       });
-    });
-  }
+    // วันที่ชุดที่สอง (สำเนา)
+  p.drawText(`${day}`, {
+    x: 615,
+    y: height - 345, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
 
+  p.drawText(`${thaiMonth}`, {
+    x: 660,
+    y: height - 345, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
+
+  p.drawText(`${year}`, {
+    x: 740,
+    y: height - 345, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+  });
+});
+}
   // เพิ่มลายเซ็นใน PDF
   if (savedSignatureTableMatData && savedSignatureTableMatData.signature) {
     const signatureImage = await pdfDoc.embedPng(savedSignatureTableMatData.signature);
     const signatureDims = signatureImage.scale(0.2);
 
     pdfDoc.getPages().forEach((p) => {
+       // ลายเซ็นชุดแรก
       p.drawImage(signatureImage, {
         x: 350,
         y: 235,
         width: signatureDims.width,
         height: signatureDims.height,
       });
-    });
-  }
+    // ลายเซ็นชุดที่สอง (สำเนา)
+  p.drawImage(signatureImage, {
+    x: 650,
+    y: 235, // เปลี่ยนตำแหน่งให้ต่ำกว่าเดิม
+    width: signatureDims.width,
+    height: signatureDims.height,
+  });
+});
+}
 
   const pdfBytes = await pdfDoc.save();
 
