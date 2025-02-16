@@ -577,7 +577,7 @@ const filteredData = ref([]); // ข้อมูลหลังกรอง
 
 const today = new Date();
 const isMonday = today.getDay() === 1;
-const isFirstDayOfMonth = today.getDate() === 16;
+const isFirstDayOfMonth = today.getDate() === 17;
 const perpage = ref(5); // จำนวนรายการต่อหน้า
 const currentWristStrapPage = ref(1); // หน้าปัจจุบัน
 const currentTableMatPage = ref(1); // หน้าปัจจุบัน
@@ -612,7 +612,7 @@ const paginatedDataTableMat = computed(() => {
   // ตรวจสอบว่าวันนี้เป็นวันที่ 1 ถึง 10 ของเดือนหรือไม่
   const today = new Date();
   const dayOfMonth = today.getDate();
-  const isFirstTenDays = dayOfMonth >= 1 && dayOfMonth <= 16; // ตรวจสอบวันที่ 1-10
+  const isFirstTenDays = dayOfMonth >= 1 && dayOfMonth <= 20; // ตรวจสอบวันที่ 1-10
 
   // ถ้าอยู่ในช่วงวันที่ 1-10 → แค่ซ่อนปุ่ม (showModal.value = true) เมื่อมีข้อมูล
   if (isFirstTenDays) {

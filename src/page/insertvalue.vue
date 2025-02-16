@@ -1308,8 +1308,8 @@ try {
 
   // แสดง SweetAlert หลังจากการอัปเดตสำเร็จ
   Swal.fire({
-    title: "Success!",
-    text: "The wrist strap has been updated successfully.",
+    title: "แก้ไขข้อมูลสำเร็จ",
+    text: "ข้อมูลของ Wrist Strap ถูกแก้ไขแล้ว",
     icon: "success",
     showConfirmButton: false,
     timer: 1000,
@@ -1319,8 +1319,8 @@ try {
 } catch (error) {
   // กรณีที่เกิดข้อผิดพลาด
   Swal.fire({
-    title: "Error!",
-    text: "Failed to update the wrist strap. Please try again.",
+    title: "เกิดข้อผิดพลาด",
+    text: "แก้ไขข้อมูลไม่สำเร็จ โปรดลองอีกครั้ง",
     icon: "error",
     showConfirmButton: false,
     timer: 1000,
@@ -1353,8 +1353,8 @@ try {
 
   // แสดง SweetAlert หลังจากการอัปเดตสำเร็จ
   Swal.fire({
-    title: "Success!",
-    text: "The table-mats has been updated successfully.",
+    title: "แก้ไขข้อมูลสำเร็จ",
+    text: "ข้อมูลของ Table Mat ถูกแก้ไขแล้ว",
     icon: "success",
     showConfirmButton: false,
     timer: 1000,
@@ -1364,8 +1364,8 @@ try {
 } catch (error) {
   // กรณีที่เกิดข้อผิดพลาด
   Swal.fire({
-    title: "Error!",
-    text: "Failed to update the table-mats. Please try again.",
+    title: "เกิดข้อผิดพลาด",
+    text: "แก้ไขข้อมูลไม่สำเร็จ โปรดลองอีกครั้ง",
     icon: "error",
     showConfirmButton: false,
     timer: 1000,

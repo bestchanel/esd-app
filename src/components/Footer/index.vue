@@ -5,7 +5,7 @@
     >
       <div class="grid md:grid-cols-2 grid-cols-1 md:gap-5">
         <div class="text-center ltr:md:text-start rtl:md:text-right text-sm">
-          COPYRIGHT &copy; 2025 Woraprat, All rights Reserved
+          COPYRIGHT &copy; 2025 Acacia It Services, All rights Reserved
         </div>
         <div class="ltr:md:text-right rtl:md:text-end text-center text-sm">
           Hand-crafted & Made by

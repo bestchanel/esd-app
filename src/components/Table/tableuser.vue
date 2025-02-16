@@ -118,19 +118,15 @@
     <label for="Branchname" class="block text-sm font-medium text-gray-700">สาขา</label>
     <div class="relative">
       <select 
-        v-model="dataupdateusermodal.branches.Branchname" 
-        id="Branchname" 
-        class="textinput-like-select appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1"
-      >
-        <option value="" disabled selected>เลือกสาขา</option>
-        <option 
-  v-for="branch in branches" 
-  :key="branch.id" 
-  :value="branch.attributes.Branchname"
+  v-model="selectedBranchId" 
+  id="Branchname" 
+  class="textinput-like-select appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1"
 >
-  {{ branch.attributes.Branchname }}
-</option>
-      </select>
+  <option value="" disabled selected>เลือกสาขา</option>
+  <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+    {{ branch.attributes.Branchname }}
+  </option>
+</select>
     </div>
   </div>
 
@@ -203,11 +199,14 @@ import Tooltip from "@/components/Tooltip";
 import Pagination from "@/components/Pagination";
 import Swal from "sweetalert2";
 
+const selectedBranchId = ref(null);
+
 const openEditUserModal = ref(true);
 const dataupdateusermodal = ref("");
 const branches = ref([]);  // ตัวแปรสำหรับเก็บข้อมูลสาขา
-
+const userId = ref(null);
 const token = ref(localStorage.getItem("token"));
+const errorMessage = ref(""); // Declare errorMessage
 
 const props = defineProps({
   userData: Array,
@@ -217,6 +216,37 @@ const props = defineProps({
 
 const users = ref([]);
 
+const fetchUserData = async () => {
+      try {
+        const response = await fetch("https://esd-app-strapi.up.railway.app/api/users?populate=branches");
+        const data = await response.json();
+        const matchedUser = data.find(user => user.Name === fullname.value);
+        if (matchedUser) {
+          userId.value = matchedUser.id;
+          username.value = matchedUser.username;
+          jobTitle.value = matchedUser.Position || "Unknown Position";
+          location.value = matchedUser.branches ? matchedUser.branches.Branchname : "Unknown Branch";
+          editableBranchId.value = matchedUser.branches ? matchedUser.branches.id : null;
+
+          editableUsername.value = matchedUser.username;
+          editableFullname.value = matchedUser.Name;
+          editableEmail.value = matchedUser.email;
+          editableJobTitle.value = matchedUser.Position;
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    const fetchBranches = async () => {
+      try {
+        const response = await fetch("https://esd-app-strapi.up.railway.app/api/branches");
+        const data = await response.json();
+        branches.value = data.data;
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
 // ดึงข้อมูลจาก API เมื่อ component ถูก mount
 onMounted(async () => {
   try {
@@ -238,58 +268,55 @@ watch(
 
 const EditUser = async (item) => {
   openEditUserModal.value?.openModal();
-  dataupdateusermodal.value = item; // คัดลอกข้อมูลผู้ใช้
+  dataupdateusermodal.value = { ...item };
+  userId.value = item.id;
+  console.log("📝 ข้อมูลก่อนแก้ไข:", dataupdateusermodal.value); // Debug
+  selectedBranchId.value = item.branches ? item.branches.id : null;
 };
 
 const validateUserForm = async () => {
-  if (
-    !dataupdateusermodal.value.Name || 
-    !dataupdateusermodal.value.Position || 
-    !dataupdateusermodal.value.branches.Branchname || 
-    !dataupdateusermodal.value.email || 
-    !dataupdateusermodal.value.User_Type
-  ) {
+  if (!userId.value || !dataupdateusermodal.value.Name || !dataupdateusermodal.value.Position || !selectedBranchId.value) {
     errorMessage.value = "กรุณากรอกข้อมูลให้ครบถ้วน!";
     return;
   }
 
+  const updatedData = {
+    Name: dataupdateusermodal.value.Name,
+    Position: dataupdateusermodal.value.Position,
+    email: dataupdateusermodal.value.email,
+    User_Type: dataupdateusermodal.value.User_Type,
+    branches: { id: selectedBranchId.value }, // ✅ ส่งเป็น ID แทน
+  };
+
+  console.log("🔍 กำลังอัปเดตข้อมูล:", updatedData); // Debugging
+
   try {
-    await axios.put(
-      `https://esd-app-strapi.up.railway.app/api/users/${dataupdateusermodal.value.id}`,
-      dataupdateusermodal.value,
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      }
-    );
-
-    Swal.fire({
-      icon: "success",
-      title: "บันทึกสำเร็จ!",
-      text: "ข้อมูลถูกอัปเดตเรียบร้อยแล้ว",
-      showConfirmButton: false,
-      timer: 1000,
+    const response = await fetch(`https://esd-app-strapi.up.railway.app/api/users/${userId.value}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: JSON.stringify(updatedData),
     });
 
-    // Refresh data in parent component
-    if (props.onRefresh) {
+    const result = await response.json();
+    console.log("✅ ผลลัพธ์จากเซิร์ฟเวอร์:", result);
+
+    if (response.ok) {
       props.onRefresh();
+      openEditUserModal.value?.closeModal();
+      Swal.fire({ icon: "success", title: "บันทึกสำเร็จ!", text: "ข้อมูลถูกบันทึกเรียบร้อยแล้ว", showConfirmButton: false, timer: 1000 });
+    } else {
+      Swal.fire({ icon: "error", title: "เกิดข้อผิดพลาด", showConfirmButton: false, text: result.message || "ไม่สามารถอัปเดตข้อมูลได้", timer: 1000 });
     }
-
-    // Close modal
-    openEditUserModal.value?.closeModal();
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "เกิดข้อผิดพลาด",
-      text: "ไม่สามารถอัปเดตข้อมูลได้",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    console.error(error);
+    console.error("❌ Error:", error);
+    Swal.fire({ icon: "error", title: "เกิดข้อผิดพลาด", text: "ไม่สามารถอัปเดตข้อมูลได้", timer: 1000 });
   }
 };
+
+
 
 const DeleteUser = async (id) => {
   const confirmDelete = await Swal.fire({

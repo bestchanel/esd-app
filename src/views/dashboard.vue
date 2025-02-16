@@ -598,7 +598,7 @@ computed: {
         },
       },
       title: {
-        text: `Resistance Wrist Strap Chart (สัปดาห์ที่ ${currentWeek})`,
+        text: `Resistance Wrist Strap Chart (สัปดาห์ที่ ${currentWeek + 1})`,
         align: "left",
         offsetX: this.$store.themeSettingsStore.direction ? "0%" : 0,
         offsetY: 13,
