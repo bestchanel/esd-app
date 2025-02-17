@@ -84,16 +84,16 @@ export default {
           isModalOpen.value = true;
         },
       },
-      {
-        label: "Settings",
-        icon: "heroicons-outline:cog",
-        link: () => router.push("/settings"),
-      },
-      {
-        label: "Faq",
-        icon: "heroicons-outline:information-circle",
-        link: () => router.push("/faq"),
-      },
+      // {
+      //   label: "Settings",
+      //   icon: "heroicons-outline:cog",
+      //   link: () => router.push("/settings"),
+      // },
+      // {
+      //   label: "Faq",
+      //   icon: "heroicons-outline:information-circle",
+      //   link: () => router.push("/faq"),
+      // },
       {
   label: "Logout",
   icon: "heroicons-outline:login",

@@ -56,7 +56,7 @@
           />
         </router-link>
         <router-link
-          :to="{ name: 'home' }"
+          :to="{ name: 'dashboard' }"
           v-if="
             this.$store.themeSettingsStore.sidebarCollasp &&
             !this.$store.themeSettingsStore.isMouseHovered

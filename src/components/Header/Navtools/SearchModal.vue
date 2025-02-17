@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button
+    <!-- <button
       @click="openModal"
       class="flex items-center xl:text-sm text-lg xl:text-slate-400 text-slate-800 dark:text-slate-300 px-1 space-x-3 rtl:space-x-reverse"
     >
@@ -8,7 +8,7 @@
         class="xl:inline-block hidden"
         >Search...</span
       >
-    </button>
+    </button> -->
   </div>
   <TransitionRoot :show="isOpen" as="template">
     <Dialog
