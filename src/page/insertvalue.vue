@@ -555,27 +555,32 @@ class="ml-4"
       labelClass="btn-ghost"
       class="ml-auto"
     >
-      <p>
-        ชื่อ-นามสกุล :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Name
-        }}
-      </p>
-      <p>
-        Email :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .email
-        }}
-      </p>
-      <p>
-        ตำแหน่ง :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Position
-        }}
-      </p>
+    <Textinput
+              v-model="dataupdatemodal.attributes.users_permissions_user.data.attributes
+              .Name"
+              placeholder="กรอกชื่อ-นามสกุล"
+              label="ชื่อ-นามสกุล"
+              :disabled="isDisabled"
+              class="mt-4"
+            />
+          <Textinput
+      type="text"
+      id="week"
+      v-model="week"
+      placeholder="กรอกสัปดาห์ที่"
+      label="สัปดาห์ที่"
+      :disabled="isDisabled"
+      class="mt-4"
+    />
+    <Textinput
+      type="text"
+      id="recordDate"
+      v-model="recordDate"
+      placeholder="กรอกวันที่บันทึก"
+      label="วันที่บันทึก"
+      :disabled="isDisabled"
+      class="mt-4"
+    />
 
       <div class="text-base text-slate-600 dark:text-slate-300">
         <Textinput
@@ -601,27 +606,24 @@ class="ml-4"
       labelClass="btn-ghost"
       class="ml-auto"
     >
-      <p>
-        ชื่อ-นามสกุล :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Name
-        }}
-      </p>
-      <p>
-        Email :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .email
-        }}
-      </p>
-      <p>
-        ตำแหน่ง :
-        {{
-          dataupdatemodal.attributes.users_permissions_user.data.attributes
-            .Position
-        }}
-      </p>
+    <Textinput
+              v-model="dataupdatemodal.attributes.users_permissions_user.data.attributes
+              .Name"
+              placeholder="กรอกชื่อ-นามสกุล"
+              label="ชื่อ-นามสกุล"
+              :disabled="isDisabled"
+              class="mt-4"
+            />
+
+    <Textinput
+      type="text"
+      id="recordDate"
+      v-model="recordDate"
+      placeholder="กรอกวันที่บันทึก"
+      label="วันที่บันทึก"
+      :disabled="isDisabled"
+      class="mt-4"
+    />
       <div class="mt-4">
             <label
               class="block font-medium text-base text-slate-600 dark:text-slate-300"
