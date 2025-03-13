@@ -5,61 +5,68 @@
 
   <div v-if="showformprint == false">
 <Card title="จัดการค่าความต้านทาน">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center space-x-4">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
+    <!-- Dropdown สำหรับเลือกตาราง -->
       <!-- Dropdown สำหรับเลือกตาราง -->
       <select
         id="tableType"
         v-model="selectedTable"
         @change="get_data()"
-        class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       >
         <option value="เลือกตารางที่แสดง">เลือกตารางที่แสดง</option>
         <option value="WRIST STRAP">WRIST STRAP</option>
         <option value="TABLE MAT">TABLE MAT</option>
       </select>
-
-      <!-- แสดง DatePicker เฉพาะเมื่อเลือก WRIST STRAP -->
-      <VueTailwindDatePicker
+      
+<!-- แสดง DatePicker เฉพาะเมื่อเลือก WRIST STRAP -->
+<VueTailwindDatePicker
   v-if="selectedTable === 'WRIST STRAP'"
   v-model="dateValue"
   v-slot="{ clear }"
+  class="w-full"
 >
   <div>
     <div
-      class="date-btn inline-flex btn btn-md whitespace-nowrap space-x-2 rtl:space-x-reverse cursor-pointer bg-white dark:bg-slate-800 dark:text-slate-300 btn-md h-min text-sm font-normal text-slate-900 px-3 py-2 border border-gray-300"
+      class="block w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       @click="setDefaultDropdowns(clear)"
     >
-      <span class="text-lg"><Icon icon="heroicons:calendar" /></span>
-      <span>{{ displayDate }}</span>
+      <div class="flex items-center space-x-2">
+        <span class="text-lg"><Icon icon="heroicons:calendar" /></span>
+        <span class="text-gray-700 dark:text-gray-300">{{ displayDate }}</span>
+      </div>
     </div>
   </div>
 </VueTailwindDatePicker>  
 
-      
-            <!-- แสดง DatePicker เฉพาะเมื่อเลือก Table Mat -->
+<!-- แสดง DatePicker เฉพาะเมื่อเลือก Table Mat -->
 <VueTailwindDatePicker 
-v-if="selectedTable === 'TABLE MAT'" 
-v-model="dateValue2" 
-v-slot="{ clear }"
+  v-if="selectedTable === 'TABLE MAT'" 
+  v-model="dateValue2" 
+  v-slot="{ clear }"
+  class="w-full"  
 >
-<div>
-  <div
-    class="shadow-sm date-btn inline-flex btn btn-md whitespace-nowrap space-x-2 rtl:space-x-reverse cursor-pointer bg-white dark:bg-slate-800 dark:text-slate-300 btn-md h-min text-sm font-normal text-slate-900 px-3 py-2 border border-gray-300"
-    @click="setDefaultDropdownsTablemat(clear)"
-  >
-    <span class="text-lg"><Icon icon="heroicons:calendar" /></span>
-    <span>{{ displayDate2 }}</span>
+  <div>
+    <div
+      class="block w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      @click="setDefaultDropdownsTablemat(clear)"
+    >
+      <div class="flex items-center space-x-2">
+        <span class="text-lg"><Icon icon="heroicons:calendar" /></span>
+        <span class="text-gray-700 dark:text-gray-300">{{ displayDate2 }}</span>
+      </div>
+    </div>
   </div>
-</div>
 </VueTailwindDatePicker>
+
 
 <!-- Dropdown สำหรับเลือกสาขา -->
 <select
 v-if="selectedTable === 'WRIST STRAP'"
 v-model="selectedBranch"
 @change="filterByMonthAndWeek"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="" selected>แสดงทุกสาขา</option>
 <option v-for="branch in branches" :key="branch.id" :value="branch.attributes.Branchname">
@@ -71,7 +78,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 <select v-if="selectedTable === 'WRIST STRAP'"
 v-model="selectedYear"
 @change="filterByMonthAndWeek"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="" selected>แสดงทุกปี</option>
 <option v-for="year in years" :key="year" :value="year">
@@ -84,7 +91,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 <select v-if="selectedTable === 'WRIST STRAP'"
 v-model="selectedMonth"
 @change="filterByMonthAndWeek"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="">แสดงทุกเดือน</option>
 <option v-for="month in months" :key="month" :value="month">
@@ -98,7 +105,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 id="weekFilter"
 v-model="selectedWeek"
 @change="filterByMonthAndWeek"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="">แสดงทุกสัปดาห์</option>
 <option value="1">สัปดาห์ที่ 1</option>
@@ -114,7 +121,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 v-if="selectedTable === 'TABLE MAT'"
 v-model="selectedBranch"
 @change="filterByMonthAndBranch"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="" selected>แสดงทุกสาขา</option>
 <option v-for="branch in branches" :key="branch.id" :value="branch.attributes.Branchname">
@@ -125,7 +132,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 <select v-if="selectedTable === 'TABLE MAT'"
 v-model="selectedYear"
 @change="filterByMonthAndBranch"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="" selected>แสดงทุกปี</option>
 <option v-for="year in years" :key="year" :value="year">
@@ -137,7 +144,7 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
   <select v-if="selectedTable === 'TABLE MAT'"
 v-model="selectedMonth"
 @change="filterByMonthAndBranch"
-class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+class="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 >
 <option value="" selected>แสดงทุกเดือน</option>
 <option v-for="(month, index) in months" :key="index" :value="month">
@@ -146,234 +153,229 @@ class="block max-w-xs px-3 py-2 border border-gray-300 rounded-md shadow-sm focu
 </select>
 </div>
 
+<div class="flex flex-wrap gap-4 justify-end">
+  <!-- Modal Section -->
+  <Modal
+    v-if="showModal"
+    ref="closemodal"
+    title="บันทึกค่าความต้านทาน"
+    label="บันทึกค่าความต้านทาน"
+    labelClass="btn-success"
+    class="w-full sm:w-auto"
+  >
+    <label
+      for="options"
+      class="block font-medium text-base text-slate-600 dark:text-slate-300 mt-4"
+    >
+      เลือกเครื่องมือวัด
+    </label>
+    <select
+      id="options"
+      v-model="selectedOption"
+      class="mt-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    >
+      <option value="">เลือกเครื่องมือวัด</option>
+      <option value="WRIST STRAP">WRIST STRAP</option>
+      <option value="TABLE MAT">TABLE MAT</option>
+    </select>
 
-
-      <div class="flex justify-end">
-
-        <!-- ปุ่มและ Modal สำหรับ WRIST STRAP -->
-
-<Button 
-v-if="selectedTable === 'WRIST STRAP'"
-@click="openWristStrapModal"
-btnClass="btn-success"
-:text="savedSignatureWristStrap ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
-icon="ph:signature"
-class="mr-4" 
-/>
-
-<!-- Modal สำหรับลายเซ็น -->
-<!-- Modal สำหรับลายเซ็น Wrist Strap -->
-<Transition>
-<div v-if="state.showSignatureWristStrap" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Wrist Strap</h2>
-    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
-    <div class="flex justify-center">
-      <Vue3Signature ref="signatureWristStrap" :sigOption="state.option" :w="'300px'" :h="'300px'" 
-             :disabled="state.disabled" class="example"/>
+    <!-- WRIST STRAP Section -->
+    <div v-if="selectedOption === 'WRIST STRAP'" class="text-base text-slate-600 dark:text-slate-300 mt-4">
+      <Textinput
+        v-model="fullname"
+        placeholder="กรอกชื่อ-นามสกุล"
+        label="ชื่อ-นามสกุล"
+        :disabled="isDisabled"
+        class="mt-4"
+      />
+      <Textinput
+        type="text"
+        id="week"
+        v-model="week"
+        placeholder="กรอกสัปดาห์ที่"
+        label="สัปดาห์ที่"
+        :disabled="isDisabled"
+        class="mt-4"
+      />
+      <Textinput
+        type="text"
+        id="recordDate"
+        v-model="recordDate"
+        placeholder="กรอกวันที่บันทึก"
+        label="วันที่บันทึก"
+        :disabled="isDisabled"
+        class="mt-4"
+      />
+      <Textinput
+        v-model.number="Resitance"
+        placeholder="กรอกค่าความต้านทาน WRIST STRAP"
+        label="ค่าความต้านทาน WRIST STRAP"
+        class="mt-4"
+        type="number"
+      />
     </div>
-    <div class="flex gap-3 r mt-4">
-      <button @click="saveSignatureWristStrap" 
-              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
-      <button @click="clearSignatureWristStrap" 
-              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
-      <button @click="undoWristStrap" 
-              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
-      <button @click="state.showSignatureWristStrap = false" 
-              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
-    </div>
-    <p v-if="savedSignatureWristStrap" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
-  </div>
-</div>
-</Transition>
 
-
-<!-- ปุ่มและ Modal สำหรับ TABLE MAT -->
-<Button 
-v-if="selectedTable === 'TABLE MAT'"
- @click="openTableMatModal"
-btnClass="btn-success"
-:text="savedSignatureTableMat ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
-icon="ph:signature"
-class="mr-4" 
-/>
-
-<!-- Modal สำหรับลายเซ็น -->
-<Transition>
-<div v-if="state.showSignatureTableMat" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-    <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Table Mat</h2>
-    <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
-    <div class="flex justify-center">
-      <Vue3Signature ref="signatureTableMat" :sigOption="state.option" :w="'300px'" :h="'300px'" 
-             :disabled="state.disabled" class="example"/>
-    </div>
-    <div class="flex gap-3 r mt-4">
-      <button @click="saveSignatureTableMat" 
-              class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
-      <button @click="clearSignatureTableMat" 
-              class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
-      <button @click="undoTableMat" 
-              class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
-      <button @click="state.showSignatureTableMat = false" 
-              class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
-    </div>
-    <p v-if="savedSignatureTableMat" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
-  </div>
-</div>
-</Transition>
-
-
-      <!-- Modal Section -->
-      <Modal 
-        v-if="showModal"
-        ref="closemodal"
-        title="บันทึกค่าความต้านทาน"
-        label="บันทึกค่าความต้านทาน"
-        labelClass="btn-success"
-        class="ml-auto"
-      >
-        <label
-          for="options"
-          class="block font-medium text-base text-slate-600 dark:text-slate-300 mt-4"
-          >เลือกเครื่องมือวัด</label
-        >
-        <select
-          id="options"
-          v-model="selectedOption"
-          class="mt-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        >
-          <option value="">เลือกเครื่องมือวัด</option>
-          <option value="WRIST STRAP">WRIST STRAP</option>
-          <option value="TABLE MAT">TABLE MAT</option>
-        </select>
-
-        <!-- WRIST STRAP Section -->
-        <div
-          v-if="selectedOption === 'WRIST STRAP'"
-          class="text-base text-slate-600 dark:text-slate-300"
-        >
-          <Textinput
-            v-model="fullname"
-            placeholder="กรอกชื่อ-นามสกุล"
-            label="ชื่อ-นามสกุล"
-            :disabled="isDisabled"
-            class="mt-4"
+    <!-- TABLE MAT Section -->
+    <div v-if="selectedOption === 'TABLE MAT'" class="text-base text-slate-600 dark:text-slate-300 mt-4">
+      <Textinput
+        v-model="fullname"
+        placeholder="กรอกชื่อ-นามสกุล"
+        label="ชื่อ-นามสกุล"
+        :disabled="isDisabled"
+        class="mt-4"
+      />
+      <Textinput
+        type="text"
+        id="recordDate"
+        v-model="recordDate"
+        placeholder="กรอกวันที่บันทึก"
+        label="วันที่บันทึก"
+        :disabled="isDisabled"
+        class="mt-4"
+      />
+      <div class="mt-4">
+        <label class="block font-medium text-base text-slate-600 dark:text-slate-300">
+          Table Mat ต่อกับสายดิน (Ground) หรือไม่
+        </label>
+        <div class="flex items-center mt-2">
+          <input
+            type="radio"
+            id="groundYes"
+            v-model="Ground"
+            :value="true"
+            class="mr-2"
           />
-  <Textinput
-    type="text"
-    id="week"
-    v-model="week"
-    placeholder="กรอกสัปดาห์ที่"
-    label="สัปดาห์ที่"
-    :disabled="isDisabled"
-    class="mt-4"
+          <label for="groundYes" class="mr-4">ใช่</label>
+          <input
+            type="radio"
+            id="groundNo"
+            v-model="Ground"
+            :value="false"
+            class="mr-2"
+          />
+          <label for="groundNo">ไม่</label>
+        </div>
+      </div>
+      <Textinput
+        v-model="ResistanceTableMat"
+        placeholder="กรอกค่าความต้านทาน TABLE MAT"
+        label="ค่าความต้านทาน TABLE MAT"
+        class="mt-4"
+        type="number"
+      />
+    </div>
+
+    <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
+
+    <Button
+      btnClass="btn-success mt-4 w-full sm:w-auto"
+      text="บันทึกข้อมูล"
+      icon="gridicons:add"
+      @click="SaveData"
+    />
+  </Modal>
+
+  <Button
+    @click="openModal"
+    btnClass="btn-success"
+    text="บันทึกค่าความต้านทาน"
+    icon="ph:plus"
+    class="w-full sm:w-auto"
   />
-  <Textinput
-    type="text"
-    id="recordDate"
-    v-model="recordDate"
-    placeholder="กรอกวันที่บันทึก"
-    label="วันที่บันทึก"
-    :disabled="isDisabled"
-    class="mt-4"
+  <!-- WRIST STRAP Button and Modal -->
+  <Button
+    v-if="selectedTable === 'WRIST STRAP'"
+    @click="openWristStrapModal"
+    btnClass="btn-success"
+    :text="savedSignatureWristStrap ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
+    icon="ph:signature"
+    class="w-full sm:w-auto"
   />
-          <Textinput
-            v-model.number="Resitance"
-            placeholder="กรอกค่าความต้านทาน WRIST STRAP"
-            label="ค่าความต้านทาน WRIST STRAP"
-            class="mt-4"
-            type="number"
+
+  <!-- Modal for WRIST STRAP Signature -->
+  <Transition>
+    <div v-if="state.showSignatureWristStrap" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Wrist Strap</h2>
+        <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
+        <div class="flex justify-center">
+          <Vue3Signature
+            ref="signatureWristStrap"
+            :sigOption="state.option"
+            :w="'300px'"
+            :h="'300px'"
+            :disabled="state.disabled"
+            class="example"
           />
         </div>
+        <div class="flex gap-3 r mt-4">
+          <button @click="saveSignatureWristStrap" class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
+          <button @click="clearSignatureWristStrap" class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
+          <button @click="undoWristStrap" class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
+          <button @click="state.showSignatureWristStrap = false" class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
+        </div>
+        <p v-if="savedSignatureWristStrap" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
+      </div>
+    </div>
+  </Transition>
 
-        <!-- TABLE MAT Section -->
-        <div
-          v-if="selectedOption === 'TABLE MAT'"
-          class="text-base text-slate-600 dark:text-slate-300"
-        >
-          <Textinput
-            v-model="fullname"
-            placeholder="กรอกชื่อ-นามสกุล"
-            label="ชื่อ-นามสกุล"
-            :disabled="isDisabled"
-            class="mt-4"
-          />
-          <Textinput
-    type="text"
-    id="recordDate"
-    v-model="recordDate"
-    placeholder="กรอกวันที่บันทึก"
-    label="วันที่บันทึก"
-    :disabled="isDisabled"
-    class="mt-4"
+  <!-- TABLE MAT Button and Modal -->
+  <Button
+    v-if="selectedTable === 'TABLE MAT'"
+    @click="openTableMatModal"
+    btnClass="btn-success"
+    :text="savedSignatureTableMat ? 'เปิดช่องเซ็นชื่อ ✅' : 'เปิดช่องเซ็นชื่อ'"
+    icon="ph:signature"
+    class="w-full sm:w-auto"
   />
-          <div class="mt-4">
-            <label
-              class="block font-medium text-base text-slate-600 dark:text-slate-300"
-              >Table Mat ต่อกับสายดิน (Ground) หรือไม่</label
-            >
-            <div class="flex items-center mt-2">
-              <input
-                type="radio"
-                id="groundYes"
-                v-model="Ground"
-                :value="true"
-                class="mr-2"
-              />
-              <label for="groundYes" class="mr-4">ใช่</label>
-              <input
-                type="radio"
-                id="groundNo"
-                v-model="Ground"
-                :value="false"
-                class="mr-2"
-              />
-              <label for="groundNo">ไม่</label>
-            </div>
-          </div>
-          <Textinput
-            v-model="ResistanceTableMat"
-            placeholder="กรอกค่าความต้านทาน TABLE MAT"
-            label="ค่าความต้านทาน TABLE MAT"
-            class="mt-4"
-            type="number"
+
+  <!-- Modal for TABLE MAT Signature -->
+  <Transition>
+    <div v-if="state.showSignatureTableMat" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-lg font-semibold mb-4">เซ็นชื่อของคุณ - Table Mat</h2>
+        <p class="text-sm text-gray-500 mb-4">วันที่: {{ currentDate2 }}</p>
+        <div class="flex justify-center">
+          <Vue3Signature
+            ref="signatureTableMat"
+            :sigOption="state.option"
+            :w="'300px'"
+            :h="'300px'"
+            :disabled="state.disabled"
+            class="example"
           />
         </div>
+        <div class="flex gap-3 r mt-4">
+          <button @click="saveSignatureTableMat" class="px-4 py-2 bg-green-500 text-white rounded-md">บันทึก</button>
+          <button @click="clearSignatureTableMat" class="px-4 py-2 bg-red-500 text-white rounded-md">ล้าง</button>
+          <button @click="undoTableMat" class="px-4 py-2 bg-orange-500 text-white rounded-md">ย้อนกลับ</button>
+          <button @click="state.showSignatureTableMat = false" class="px-4 py-2 bg-gray-500 text-white rounded-md">ปิด</button>
+        </div>
+        <p v-if="savedSignatureTableMat" class="text-green-600 font-bold mt-2">✅ บันทึกแล้ว</p>
+      </div>
+    </div>
+  </Transition>
 
-        <p v-if="errorMessage" class="text-red-500 mt-2">
-          {{ errorMessage }}
-        </p>
-        <Button
-          btnClass="btn-success mt-4"
-          text="บันทึกข้อมูล"
-          icon="gridicons:add"
-          @click="SaveData"
-        />
-      </Modal>
-<!-- ปุ่ม ออกรายงาน PDF -->
-<Button
-v-if="selectedTable === 'WRIST STRAP'"
-btnClass="btn-danger"
-text="ออกรายงาน PDF"
-icon="vscode-icons:file-type-pdf2"
-@click="printWristStrap"
-class="ml-4"
-/>
+  <!-- Export PDF Buttons -->
+  <Button
+    v-if="selectedTable === 'WRIST STRAP'"
+    btnClass="btn-danger"
+    text="ออกรายงาน PDF"
+    icon="vscode-icons:file-type-pdf2"
+    @click="printWristStrap"
+    class="w-full sm:w-auto"
+  />
 
-
-
-<Button
-v-if="selectedTable === 'TABLE MAT'"
-btnClass="btn-danger"
-text="ออกรายงาน PDF"
-icon="vscode-icons:file-type-pdf2"
-@click="printTableMat"
-class="ml-4"
-/>
-
-
+  <Button
+    v-if="selectedTable === 'TABLE MAT'"
+    btnClass="btn-danger"
+    text="ออกรายงาน PDF"
+    icon="vscode-icons:file-type-pdf2"
+    @click="printTableMat"
+    class="w-full sm:w-auto"
+  />
 </div>
+
 
     </div>
 
@@ -553,7 +555,7 @@ class="ml-4"
       title="แก้ไขค่าความต้านทาน"
       label=""
       labelClass="btn-ghost"
-      class="ml-auto"
+      class="w-full sm:w-auto"
     >
     <Textinput
               v-model="dataupdatemodal.attributes.users_permissions_user.data.attributes
@@ -700,7 +702,7 @@ const dateValue2 = ref("");
 
 // ฟังก์ชันสำหรับแปลงช่วงวันที่เป็นข้อความโดยไม่เอาเวลา
 const formatDateRange = (range) => {
-if (!range) return "เลือกช่วงวันที่";
+if (!range) return "ช่วงวันที่";
 
 // แยกวันที่จากช่วงที่เลือก เช่น "2024-01-30 10:00:00 ~ 2024-02-05 18:00:00"
 const regex = /(\d{4}-\d{2}-\d{2}) \d{2}:\d{2}:\d{2} ~ (\d{4}-\d{2}-\d{2}) \d{2}:\d{2}:\d{2}/;
@@ -747,7 +749,7 @@ filterByMonthAndBranch();
 
 
 
-const showModal = ref(true);
+const showModal = ref(false);
 const openEditmodal = ref(true);
 const openEditmodalTableMat = ref(true);
 const closemodal = ref(false);
@@ -2086,6 +2088,10 @@ onMounted(() => {
 get_data();
 });
 
+
+const openModal = () => {
+  closemodal.value?.openModal();
+};
 </script>
 
 <style scoped>
